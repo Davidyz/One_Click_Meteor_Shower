@@ -110,17 +110,19 @@ EXTRACT_RGB_VALUE_THRESHOLD = 48
 # 2021-8-18: It seems the exe will run fail if we needs over 12 threads.
 #            Don't know why but just limit the CPU # to 8 at present.
 #            But running in IDE environment is no problem.
-MAX_CPU_FOR_DETECTION = 8
-MAX_CPU_FOR_MASK_EXTRACTION = 8
+MAX_CPU_FOR_DETECTION = 12
+MAX_CPU_FOR_MASK_EXTRACTION = 12
 
 # =============================================================================
 # The Neural Network
 CNN_IMAGE_SIZE = 256
 
 # 2020-10-25: This model weight seems to have the best performance on one test set
-CNN_SAVED_MODEL = 'saved_model/cnn_star_256_20201025.hdf5'
+CNN_SAVED_MODEL = "./saved_model/cnn_star_256_20201025_1_cnn11_lre-4_.731-0.00002.hdf5"
 
 UNET_IMAGE_SIZE = 256
 
 # 2021-03-15: Newer trained model for UNET++. Test result is quite good
-UNET_SAVED_MODEL = 'saved_model/unet++_meteor_gray256_20210314.hdf5'
+UNET_SAVED_MODEL = (
+    "./saved_model/unet++_meteor_gray256_20210314-3_wo_val.297-0.201.hdf5"
+)
