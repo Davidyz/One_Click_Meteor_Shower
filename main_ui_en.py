@@ -55,8 +55,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.selectFolderButton.setFont(font)
-        self.selectFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.selectFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.selectFolderButton.setObjectName("selectFolderButton")
         self.verticalLayout_3.addWidget(self.selectFolderButton)
         self.label_2 = QtWidgets.QLabel(self.groupBox_3)
@@ -66,8 +67,9 @@ class Ui_MainWindow(object):
         self.label_2.setObjectName("label_2")
         self.verticalLayout_3.addWidget(self.label_2)
         self.listView = QtWidgets.QListView(self.groupBox_3)
-        self.listView.setStyleSheet("background-color: rgb(43, 43, 43);\n"
-"color: rgb(187, 187, 187);")
+        self.listView.setStyleSheet(
+            "background-color: rgb(43, 43, 43);\n" "color: rgb(187, 187, 187);"
+        )
         self.listView.setObjectName("listView")
         self.verticalLayout_3.addWidget(self.listView)
         self.fileNumberLabel = QtWidgets.QLabel(self.groupBox_3)
@@ -122,9 +124,11 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.doDetectionButton.setFont(font)
-        self.doDetectionButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"alternate-background-color: rgb(187, 187, 187);\n"
-"color: rgb(0, 0, 255);")
+        self.doDetectionButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n"
+            "alternate-background-color: rgb(187, 187, 187);\n"
+            "color: rgb(0, 0, 255);"
+        )
         self.doDetectionButton.setObjectName("doDetectionButton")
         self.verticalLayout.addWidget(self.doDetectionButton)
         self.line = QtWidgets.QFrame(self.groupBox)
@@ -173,8 +177,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.openDetectionFolderButton.setFont(font)
-        self.openDetectionFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.openDetectionFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.openDetectionFolderButton.setObjectName("openDetectionFolderButton")
         self.verticalLayout.addWidget(self.openDetectionFolderButton)
         self.line_2 = QtWidgets.QFrame(self.groupBox)
@@ -197,8 +202,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.generateMaskButton.setFont(font)
-        self.generateMaskButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.generateMaskButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.generateMaskButton.setObjectName("generateMaskButton")
         self.verticalLayout.addWidget(self.generateMaskButton)
         self.line_3 = QtWidgets.QFrame(self.groupBox)
@@ -248,8 +254,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.openMaskFolderButton.setFont(font)
-        self.openMaskFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.openMaskFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.openMaskFolderButton.setObjectName("openMaskFolderButton")
         self.verticalLayout.addWidget(self.openMaskFolderButton)
         self.line_4 = QtWidgets.QFrame(self.groupBox)
@@ -273,8 +280,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.generateFinalButton.setFont(font)
-        self.generateFinalButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.generateFinalButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.generateFinalButton.setObjectName("generateFinalButton")
         self.verticalLayout.addWidget(self.generateFinalButton)
         self.line_7 = QtWidgets.QFrame(self.groupBox)
@@ -298,8 +306,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.openFinalFolderButton.setFont(font)
-        self.openFinalFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.openFinalFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.openFinalFolderButton.setObjectName("openFinalFolderButton")
         self.verticalLayout.addWidget(self.openFinalFolderButton)
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
@@ -316,8 +325,9 @@ class Ui_MainWindow(object):
         font.setFamily("Courier New")
         self.processLogsEdit.setFont(font)
         self.processLogsEdit.setAutoFillBackground(False)
-        self.processLogsEdit.setStyleSheet("background-color: rgb(43, 43, 43);\n"
-"color: rgb(187, 187, 187);")
+        self.processLogsEdit.setStyleSheet(
+            "background-color: rgb(43, 43, 43);\n" "color: rgb(187, 187, 187);"
+        )
         self.processLogsEdit.setReadOnly(True)
         self.processLogsEdit.setObjectName("processLogsEdit")
         self.verticalLayout_2.addWidget(self.processLogsEdit)
@@ -336,7 +346,9 @@ class Ui_MainWindow(object):
         self.label_20.setFont(font)
         self.label_20.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.label_20.setStyleSheet("color: rgb(170, 255, 255);")
-        self.label_20.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_20.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_20.setObjectName("label_20")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -351,32 +363,90 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Auto meteor shower"))
         self.logoLabel.setText(_translate("MainWindow", "Logo"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Selected image folder:"))
-        self.label.setText(_translate("MainWindow", "Notice: The images need to be star-aligned !"))
+        self.label.setText(
+            _translate("MainWindow", "Notice: The images need to be star-aligned !")
+        )
         self.selectFolderButton.setText(_translate("MainWindow", "Select folder"))
-        self.label_2.setText(_translate("MainWindow", "Image file list in folder (jpg / bmp / png / tif)"))
-        self.fileNumberLabel.setText(_translate("MainWindow", "0 image file(s) in the list"))
+        self.label_2.setText(
+            _translate(
+                "MainWindow", "Image file list in folder (jpg / bmp / png / tif)"
+            )
+        )
+        self.fileNumberLabel.setText(
+            _translate("MainWindow", "0 image file(s) in the list")
+        )
         self.groupBox.setTitle(_translate("MainWindow", "Process steps"))
         self.label_4.setText(_translate("MainWindow", "Step 1: Detect meteor objects"))
-        self.isEQmountCheckBox.setText(_translate("MainWindow", " Taken on equatorial mount"))
+        self.isEQmountCheckBox.setText(
+            _translate("MainWindow", " Taken on equatorial mount")
+        )
         self.label_15.setText(_translate("MainWindow", "Note:"))
-        self.label_16.setText(_translate("MainWindow", "Select the above checkbox if the images were taken on an equatorial mount. Otherwise (images were taken on fixed tripod) don\'t select this option."))
+        self.label_16.setText(
+            _translate(
+                "MainWindow",
+                "Select the above checkbox if the images were taken on an equatorial mount. Otherwise (images were taken on fixed tripod) don't select this option.",
+            )
+        )
         self.doDetectionButton.setText(_translate("MainWindow", "Do the detection"))
-        self.label_5.setText(_translate("MainWindow", "Step 2: Manually filter detected objects"))
+        self.label_5.setText(
+            _translate("MainWindow", "Step 2: Manually filter detected objects")
+        )
         self.label_3.setText(_translate("MainWindow", "Note:"))
-        self.label_10.setText(_translate("MainWindow", "Some objects would still be mis-classified as a meteor. Still needs further improvement here."))
-        self.label_11.setText(_translate("MainWindow", "You can delete the non-meteor objects from the \"good\" folder. And move the meteor objects from the \"removed\" folder back to the \"good\" folder."))
-        self.openDetectionFolderButton.setText(_translate("MainWindow", "Open the detected folder"))
+        self.label_10.setText(
+            _translate(
+                "MainWindow",
+                "Some objects would still be mis-classified as a meteor. Still needs further improvement here.",
+            )
+        )
+        self.label_11.setText(
+            _translate(
+                "MainWindow",
+                'You can delete the non-meteor objects from the "good" folder. And move the meteor objects from the "removed" folder back to the "good" folder.',
+            )
+        )
+        self.openDetectionFolderButton.setText(
+            _translate("MainWindow", "Open the detected folder")
+        )
         self.label_6.setText(_translate("MainWindow", "Step 3: Generate meteor mask"))
-        self.generateMaskButton.setText(_translate("MainWindow", "Generate meteor mask"))
-        self.label_7.setText(_translate("MainWindow", "Step 4: Manually check the quality of the mask files"))
+        self.generateMaskButton.setText(
+            _translate("MainWindow", "Generate meteor mask")
+        )
+        self.label_7.setText(
+            _translate(
+                "MainWindow", "Step 4: Manually check the quality of the mask files"
+            )
+        )
         self.label_13.setText(_translate("MainWindow", "Note:"))
-        self.label_12.setText(_translate("MainWindow", "Some generated mask would have some \"noise\" left. And some may not cover the meteor object well."))
-        self.label_14.setText(_translate("MainWindow", "You can use photo processing tool to adjust the mask files. Remove those \"noise\" by black brush. Extend the mask range with white brush if needed."))
-        self.openMaskFolderButton.setText(_translate("MainWindow", "Open the mask file folder"))
-        self.label_8.setText(_translate("MainWindow", "Step 5: Generate the final mask files and the combined meteor shower"))
-        self.generateFinalButton.setText(_translate("MainWindow", "Generate final output"))
-        self.label_9.setText(_translate("MainWindow", "Step 6: Get the final output files"))
-        self.openFinalFolderButton.setText(_translate("MainWindow", "Open the final output folder"))
+        self.label_12.setText(
+            _translate(
+                "MainWindow",
+                'Some generated mask would have some "noise" left. And some may not cover the meteor object well.',
+            )
+        )
+        self.label_14.setText(
+            _translate(
+                "MainWindow",
+                'You can use photo processing tool to adjust the mask files. Remove those "noise" by black brush. Extend the mask range with white brush if needed.',
+            )
+        )
+        self.openMaskFolderButton.setText(
+            _translate("MainWindow", "Open the mask file folder")
+        )
+        self.label_8.setText(
+            _translate(
+                "MainWindow",
+                "Step 5: Generate the final mask files and the combined meteor shower",
+            )
+        )
+        self.generateFinalButton.setText(
+            _translate("MainWindow", "Generate final output")
+        )
+        self.label_9.setText(
+            _translate("MainWindow", "Step 6: Get the final output files")
+        )
+        self.openFinalFolderButton.setText(
+            _translate("MainWindow", "Open the final output folder")
+        )
         self.groupBox_2.setTitle(_translate("MainWindow", "Output logs"))
         self.meteorLabel.setText(_translate("MainWindow", "Logo"))
         self.label_20.setText(_translate("MainWindow", "Auto Meteor-Shower Processing"))

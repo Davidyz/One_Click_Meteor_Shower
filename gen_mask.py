@@ -23,9 +23,25 @@ class Gen_mask:
     def convert_cropped_image_folder_to_mosaic_for_big_files(self, file_dir, save_dir):
         print("\nConverting the detected meteor images to mosaic if they are big ...")
 
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff', 'TIFF']
-        image_list = [fn for fn in os.listdir(file_dir)
-                      if any(fn.endswith(ext) for ext in included_extensions)]
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
+        image_list = [
+            fn
+            for fn in os.listdir(file_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -37,7 +53,9 @@ class Gen_mask:
             filename_no_ext, file_ext = os.path.splitext(image_file)
 
             # original_img = cv2.imread(filename_w_path)
-            original_img = cv2.imdecode(np.fromfile(filename_w_path, dtype=np.uint8), -1)
+            original_img = cv2.imdecode(
+                np.fromfile(filename_w_path, dtype=np.uint8), -1
+            )
 
             orig_height = original_img.shape[0]
             orig_width = original_img.shape[1]
@@ -67,8 +85,12 @@ class Gen_mask:
 
                 overlap_ratio = settings.MOSAIC_OVERLAP_RATIO
 
-                num_X_w_overlap = math.ceil((num_X_no_overlap - overlap_ratio) / (1 - overlap_ratio))
-                num_Y_w_overlap = math.ceil((num_Y_no_overlap - overlap_ratio) / (1 - overlap_ratio))
+                num_X_w_overlap = math.ceil(
+                    (num_X_no_overlap - overlap_ratio) / (1 - overlap_ratio)
+                )
+                num_Y_w_overlap = math.ceil(
+                    (num_Y_no_overlap - overlap_ratio) / (1 - overlap_ratio)
+                )
 
                 # for i in range(num_Y):
                 for i in range(num_Y_w_overlap):
@@ -90,10 +112,13 @@ class Gen_mask:
                             x1 = orig_width - target_width
 
                         mosaic_img = original_img[y1:y2, x1:x2]
-                        file_to_save = filename_no_ext + \
-                                       "_mosaic_({:03d},{:03d})_({:03d},{:03d})". \
-                                           format(num_Y_w_overlap, num_X_w_overlap, i + 1, j + 1) + \
-                                       file_ext
+                        file_to_save = (
+                            filename_no_ext
+                            + "_mosaic_({:03d},{:03d})_({:03d},{:03d})".format(
+                                num_Y_w_overlap, num_X_w_overlap, i + 1, j + 1
+                            )
+                            + file_ext
+                        )
 
                         file_to_save = os.path.join(save_dir, file_to_save)
                         # cv2.imwrite(file_to_save, mosaic_img)
@@ -121,7 +146,7 @@ class Gen_mask:
         basewidth = settings.UNET_IMAGE_SIZE
 
         # width_percent = (basewidth / float(img.size[0]))
-        width_percent = (basewidth / gray.shape[0])
+        width_percent = basewidth / gray.shape[0]
         height = int((float(gray.shape[1]) * float(width_percent)))
 
         # img = img.resize((basewidth, heigh), PIL.Image.ANTIALIAS)
@@ -148,9 +173,25 @@ class Gen_mask:
     def convert_image_folder_to_gray_256(self, file_dir, save_dir):
         print("\nConverting the detected meteor images to gray 256x256 size ...")
 
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff', 'TIFF']
-        image_list = [fn for fn in os.listdir(file_dir)
-                      if any(fn.endswith(ext) for ext in included_extensions)]
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
+        image_list = [
+            fn
+            for fn in os.listdir(file_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -168,7 +209,9 @@ class Gen_mask:
 
         # The image size supported is (256, 256)
         # unet_model = model.unet(input_size=(settings.UNET_IMAGE_SIZE, settings.UNET_IMAGE_SIZE, 1))
-        unet_model = model.unet_plus_plus(input_size=(settings.UNET_IMAGE_SIZE, settings.UNET_IMAGE_SIZE, 1))
+        unet_model = model.unet_plus_plus(
+            input_size=(settings.UNET_IMAGE_SIZE, settings.UNET_IMAGE_SIZE, 1)
+        )
         unet_model.load_weights(settings.UNET_SAVED_MODEL)
 
         test_image_list = os.listdir(image_folder)
@@ -176,7 +219,7 @@ class Gen_mask:
 
         testGene = unet_proc.testGenerator(image_folder, as_gray=True)
 
-        '''
+        """
         test_datagen = ImageDataGenerator(rescale=1. / 255)
 
         batch_size = 1
@@ -189,7 +232,7 @@ class Gen_mask:
             color_mode='grayscale',
             shuffle=False,
             class_mode=None)
-        '''
+        """
 
         # results = unet_model.predict_generator(testGene, num_image, verbose=1)
 
@@ -208,17 +251,17 @@ class Gen_mask:
     # Need to get this info back
     #
     def get_image_pos_from_file_name(self, filename):
-        string_to_match = '_pos_('
+        string_to_match = "_pos_("
         str_pos = filename.find(string_to_match)
 
         if str_pos == -1:
             return 0, 0, 0, 0
 
-        str_x1 = filename[str_pos + 6:str_pos + 11]
-        str_y1 = filename[str_pos + 12:str_pos + 17]
+        str_x1 = filename[str_pos + 6 : str_pos + 11]
+        str_y1 = filename[str_pos + 12 : str_pos + 17]
 
-        str_x2 = filename[str_pos + 20:str_pos + 25]
-        str_y2 = filename[str_pos + 26:str_pos + 31]
+        str_x2 = filename[str_pos + 20 : str_pos + 25]
+        str_y2 = filename[str_pos + 26 : str_pos + 31]
 
         x1 = int(str_x1)
         y1 = int(str_y1)
@@ -235,14 +278,14 @@ class Gen_mask:
     # Need to get this info back
     #
     def get_image_size_from_file_name(self, filename):
-        string_to_match = '_size_('
+        string_to_match = "_size_("
         str_pos = filename.find(string_to_match)
 
         if str_pos == -1:
             return 0, 0
 
-        str_x = filename[str_pos + 7:str_pos + 12]
-        str_y = filename[str_pos + 13:str_pos + 18]
+        str_x = filename[str_pos + 7 : str_pos + 12]
+        str_y = filename[str_pos + 13 : str_pos + 18]
 
         x = int(str_x)
         y = int(str_y)
@@ -255,9 +298,25 @@ class Gen_mask:
     def resize_mask_to_original_cropped_size(self, file_dir, save_dir):
         print("\nResizing the mask back to original cropped size ...")
 
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff', 'TIFF']
-        image_list = [fn for fn in os.listdir(file_dir)
-                      if any(fn.endswith(ext) for ext in included_extensions)]
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
+        image_list = [
+            fn
+            for fn in os.listdir(file_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -274,7 +333,7 @@ class Gen_mask:
             # If the file comes from a mosaic, it would be like this:
             # IMG_3119_size_(05472,03648)_0001_pos_(02650,01938)_(03700,02988)_mosaic_(002,002)_(001,001)_gray_256_mask_1050.png
             # Normally it needs to be re-sized back to settings.DETECTION_CROP_IMAGE_BOX_SIZE (640)
-            string_to_match = '_mosaic_('
+            string_to_match = "_mosaic_("
             str_pos_mosaic = image_file.find(string_to_match)
 
             if str_pos_mosaic == -1:
@@ -287,13 +346,15 @@ class Gen_mask:
 
                 # The small mask file (in 256x256) is in 8-bit format
                 # Need to covert the image to 24-bit format
-                img = cv2.imdecode(np.fromfile(filename_w_path, dtype=np.uint8), cv2.IMREAD_COLOR)
+                img = cv2.imdecode(
+                    np.fromfile(filename_w_path, dtype=np.uint8), cv2.IMREAD_COLOR
+                )
 
                 # original_width = settings.detection_crop_img_box_size
                 original_width = abs(x2 - x1)
 
                 # width_percent = (basewidth / float(img.size[0]))
-                width_percent = (original_width / img.shape[0])
+                width_percent = original_width / img.shape[0]
                 height = int((float(img.shape[1]) * float(width_percent)))
             else:
                 # Mosaic image, the original size should be
@@ -301,7 +362,9 @@ class Gen_mask:
                 original_width = settings.DETECTION_CROP_IMAGE_BOX_SIZE
                 height = settings.DETECTION_CROP_IMAGE_BOX_SIZE
                 # img = cv2.imread(filename_w_path)
-                img = cv2.imdecode(np.fromfile(filename_w_path, dtype=np.uint8), cv2.IMREAD_COLOR)
+                img = cv2.imdecode(
+                    np.fromfile(filename_w_path, dtype=np.uint8), cv2.IMREAD_COLOR
+                )
 
             resized_img = cv2.resize(img, (original_width, height))
 
@@ -325,9 +388,25 @@ class Gen_mask:
     def mosaic_mask_files_merge_back(self, file_dir, save_dir):
         print("\nMerging the mosaic images back to one file ...")
 
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff', 'TIFF']
-        image_list = [fn for fn in os.listdir(file_dir)
-                      if any(fn.endswith(ext) for ext in included_extensions)]
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
+        image_list = [
+            fn
+            for fn in os.listdir(file_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -340,7 +419,7 @@ class Gen_mask:
         for index, image_file in image_list_iter:
             # The file name would be like this:
             # IMG_3119_size_(05472,03648)_0001_pos_(02650,01938)_(03700,02988)_mosaic_(002,002)_(001,001)_gray_256_mask_1050.png
-            string_to_match = '_mosaic_('
+            string_to_match = "_mosaic_("
             str_pos_mosaic = image_file.find(string_to_match)
 
             if str_pos_mosaic > -1:
@@ -349,13 +428,13 @@ class Gen_mask:
 
                 # To determine the original mosaic size,
                 # need to get he position info
-                string_to_match = '_pos_('
+                string_to_match = "_pos_("
                 str_pos = image_file.find(string_to_match)
 
                 if str_pos == -1:
                     continue
 
-                '''
+                """
                 str_x1 = image_file[str_pos + 6:str_pos + 11]
                 str_y1 = image_file[str_pos + 12:str_pos + 17]
 
@@ -366,7 +445,7 @@ class Gen_mask:
                 y1 = int(str_y1)
                 x2 = int(str_x2)
                 y2 = int(str_y2)
-                '''
+                """
 
                 x1, y1, x2, y2 = self.get_image_pos_from_file_name(image_file)
 
@@ -375,8 +454,8 @@ class Gen_mask:
                 orig_height = abs(y2 - y1)
 
                 # Get the X/Y number of pictures
-                str_y = image_file[str_pos_mosaic + 9:str_pos_mosaic + 12]
-                str_x = image_file[str_pos_mosaic + 13:str_pos_mosaic + 16]
+                str_y = image_file[str_pos_mosaic + 9 : str_pos_mosaic + 12]
+                str_x = image_file[str_pos_mosaic + 13 : str_pos_mosaic + 16]
 
                 x = int(str_x)
                 y = int(str_y)
@@ -392,7 +471,7 @@ class Gen_mask:
                 # img_mosaic = cv2.imread(file_to_read)
                 # img_mosaic = None
 
-                img_mosaic = Image.new('RGB', (orig_width, orig_height))
+                img_mosaic = Image.new("RGB", (orig_width, orig_height))
 
                 overlap_ratio = settings.MOSAIC_OVERLAP_RATIO
 
@@ -418,10 +497,14 @@ class Gen_mask:
 
                         # To ensure the generated mask (RGB(255,255,255)) part is not overridden,
                         # do a logical_or operation with the existing part
-                        mask = img_mosaic.crop((x_paste_from,
-                                                y_paste_from,
-                                                x_paste_from + img_width,
-                                                y_paste_from + img_width)).convert("1")
+                        mask = img_mosaic.crop(
+                            (
+                                x_paste_from,
+                                y_paste_from,
+                                x_paste_from + img_width,
+                                y_paste_from + img_width,
+                            )
+                        ).convert("1")
                         img = ImageChops.logical_or(img.convert("1"), mask)
 
                         img_mosaic.paste(img, (x_paste_from, y_paste_from))
@@ -433,17 +516,20 @@ class Gen_mask:
                 # To:
                 # IMG_3119_size_(05472,03648)_0001_pos_(02650,01938)_(03700,02988)_gray_256_mask_1050.png
                 #
-                file_to_save = image_file[0: str_pos_mosaic] + image_file[str_pos_mosaic + 27: len(image_file)]
+                file_to_save = (
+                    image_file[0:str_pos_mosaic]
+                    + image_file[str_pos_mosaic + 27 : len(image_file)]
+                )
                 # file_to_save = image_file[0: str_pos_mosaic] + "_gray_mask"
                 file_to_save = os.path.join(save_dir, file_to_save)
-                img_mosaic.save(file_to_save, 'PNG')
+                img_mosaic.save(file_to_save, "PNG")
 
                 # Done for this mosaic
                 # Need to skip (x*y-1) items
                 for i in range(x * y - 1):
                     next(image_list_iter)
 
-            else: # if str_pos_mosaic > -1:
+            else:  # if str_pos_mosaic > -1:
                 # It should be a normal image
                 # save it to the new folder
                 orig_file = image_file
@@ -454,7 +540,9 @@ class Gen_mask:
             # sleep(0.02)
         # end of for-loop
 
-    def extract_meteor_from_cropped_file_with_mask(self, cropped_photo_file, mask_file, save_file):
+    def extract_meteor_from_cropped_file_with_mask(
+        self, cropped_photo_file, mask_file, save_file
+    ):
         cropped_img = Image.open(cropped_photo_file)
 
         # Need to be processed in color
@@ -464,7 +552,7 @@ class Gen_mask:
         # 2021-7-9: Need to ensure the mask img format is in RGB
         # As we allow people to edit the mask file manually, sometimes
         # the edit s/w could save the file to RGBA format
-        mask_img = Image.open(mask_file).convert('RGB')
+        mask_img = Image.open(mask_file).convert("RGB")
 
         img_extract = ImageChops.multiply(cropped_img, mask_img)
         img_extract = img_extract.convert("RGBA")
@@ -487,7 +575,11 @@ class Gen_mask:
             #
             # if item[0] < 72 and item[1] < 72 and item[2] < 72:
             # if item[0] < 30 and item[1] < 30 and item[2] < 30:
-            if item[0] < rgb_threshold and item[1] < rgb_threshold and item[2] < rgb_threshold:
+            if (
+                item[0] < rgb_threshold
+                and item[1] < rgb_threshold
+                and item[2] < rgb_threshold
+            ):
                 newData.append((255, 255, 255, 0))
             else:
                 newData.append(item)
@@ -503,18 +595,39 @@ class Gen_mask:
     # crop_dir: The cropped meteor objects photo folder. Normally it is the "2_extraction"
     # mask_dir : The folder contains mask files which have been extended back
     #            to original photo size
-    def extract_meteor_from_cropped_folder_with_mask(self, cropped_dir, mask_dir, save_dir, verbose):
+    def extract_meteor_from_cropped_folder_with_mask(
+        self, cropped_dir, mask_dir, save_dir, verbose
+    ):
         print("\nExtrating the meteor from cropped files...")
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff', 'TIFF']
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
 
-        mask_list = [fn for fn in os.listdir(mask_dir)
-                     if any(fn.endswith(ext) for ext in included_extensions)]
+        mask_list = [
+            fn
+            for fn in os.listdir(mask_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
-        cropped_list = [fn for fn in os.listdir(cropped_dir)
-                        if any(fn.endswith(ext) for ext in included_extensions)]
+        cropped_list = [
+            fn
+            for fn in os.listdir(cropped_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         cropped_list_no_ext = [os.path.splitext(fn)[0] for fn in cropped_list]
 
@@ -522,7 +635,7 @@ class Gen_mask:
             mask_filename_no_ext, file_ext = os.path.splitext(mask_file)
 
             # To be in PNG format
-            file_to_save = mask_filename_no_ext + '_transparent.png'
+            file_to_save = mask_filename_no_ext + "_transparent.png"
             file_to_save = os.path.join(save_dir, file_to_save)
 
             # Look for the corresponding original photo file
@@ -534,7 +647,7 @@ class Gen_mask:
             #
             # NO NO NO, no need to match the ext now. We'll use .png for those mask
 
-            string_to_match = '_gray_256_mask_'
+            string_to_match = "_gray_256_mask_"
             str_pos = mask_filename_no_ext.find(string_to_match)
 
             if str_pos > -1:
@@ -553,14 +666,20 @@ class Gen_mask:
                     mask_file_to_read = os.path.join(mask_dir, mask_file)
 
                     if verbose:
-                        print("... Extracting mask {} from cropped photo {} ...".format(mask_file, cropped_file_name))
+                        print(
+                            "... Extracting mask {} from cropped photo {} ...".format(
+                                mask_file, cropped_file_name
+                            )
+                        )
 
-                    self.extract_meteor_from_cropped_file_with_mask(cropped_file_to_read,
-                                                                    mask_file_to_read,
-                                                                    file_to_save)
+                    self.extract_meteor_from_cropped_file_with_mask(
+                        cropped_file_to_read, mask_file_to_read, file_to_save
+                    )
         # end for loop of the mask_list
 
-    def extract_meteor_from_original_file_with_mask(self, original_photo_file, mask_file, save_file):
+    def extract_meteor_from_original_file_with_mask(
+        self, original_photo_file, mask_file, save_file
+    ):
         original_img = Image.open(original_photo_file)
 
         # Need to get the position info from the mask file name
@@ -581,7 +700,11 @@ class Gen_mask:
         newData = []
         rgb_threshold = settings.EXTRACT_RGB_VALUE_THRESHOLD
         for item in datas:
-            if item[0] < rgb_threshold and item[1] < rgb_threshold and item[2] < rgb_threshold:
+            if (
+                item[0] < rgb_threshold
+                and item[1] < rgb_threshold
+                and item[2] < rgb_threshold
+            ):
                 newData.append((255, 255, 255, 0))
             else:
                 newData.append(item)
@@ -597,18 +720,39 @@ class Gen_mask:
     # to be process by the UNET network.
     # In that case when doing the final extraction, we'd better to extract the meteor object from
     # the original images.
-    def extract_meteor_from_original_folder_with_mask(self, original_dir, mask_dir, save_dir, verbose):
+    def extract_meteor_from_original_folder_with_mask(
+        self, original_dir, mask_dir, save_dir, verbose
+    ):
         print("\nExtrating the meteor from cropped files...")
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff', 'TIFF']
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
 
-        mask_list = [fn for fn in os.listdir(mask_dir)
-                     if any(fn.endswith(ext) for ext in included_extensions)]
+        mask_list = [
+            fn
+            for fn in os.listdir(mask_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
-        original_list = [fn for fn in os.listdir(original_dir)
-                        if any(fn.endswith(ext) for ext in included_extensions)]
+        original_list = [
+            fn
+            for fn in os.listdir(original_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         original_list_no_ext = [os.path.splitext(fn)[0] for fn in original_list]
 
@@ -616,7 +760,7 @@ class Gen_mask:
             mask_filename_no_ext, file_ext = os.path.splitext(mask_file)
 
             # To be in PNG format
-            file_to_save = mask_filename_no_ext + '_transparent.png'
+            file_to_save = mask_filename_no_ext + "_transparent.png"
             file_to_save = os.path.join(save_dir, file_to_save)
 
             # Look for the corresponding original photo file
@@ -628,7 +772,7 @@ class Gen_mask:
             #
             # NO NO NO, no need to match the ext now. We'll use .png for those mask
 
-            string_to_match = '_size_('
+            string_to_match = "_size_("
             str_pos = mask_filename_no_ext.find(string_to_match)
 
             if str_pos > -1:
@@ -643,15 +787,21 @@ class Gen_mask:
                     # different ext in the photo folder...
                     original_file_name = original_list[list_index]
 
-                    original_file_to_read = os.path.join(original_dir, original_file_name)
+                    original_file_to_read = os.path.join(
+                        original_dir, original_file_name
+                    )
                     mask_file_to_read = os.path.join(mask_dir, mask_file)
 
                     if verbose:
-                        print("... Extracting mask {} from original photo {} ...".format(mask_file, original_file_name))
+                        print(
+                            "... Extracting mask {} from original photo {} ...".format(
+                                mask_file, original_file_name
+                            )
+                        )
 
-                    self.extract_meteor_from_original_file_with_mask(original_file_to_read,
-                                                                     mask_file_to_read,
-                                                                     file_to_save)
+                    self.extract_meteor_from_original_file_with_mask(
+                        original_file_to_read, mask_file_to_read, file_to_save
+                    )
             # sleep(0.02)
         # end for loop of the mask_list
 
@@ -667,17 +817,33 @@ class Gen_mask:
     #    function
     # When using multi-thread mode, the "selected_image_list" parameter is to
     # be used. It specify a sub-set of the image list to be handled by a thread.
-    def extend_extracted_objects_to_original_photo_size(self, file_dir, save_dir, label_save_dir,
-                                                        selected_image_list=[], verbose=1):
+    def extend_extracted_objects_to_original_photo_size(
+        self, file_dir, save_dir, label_save_dir, selected_image_list=[], verbose=1
+    ):
         if len(selected_image_list) == 0:
             print("\nExtending the extracted objects back to original photo size ...")
             # No file list specified
             # Get all image file list in the folder
-            included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff',
-                                   'TIFF']
+            included_extensions = [
+                "jpg",
+                "JPG",
+                "jpeg",
+                "JPEG",
+                "bmp",
+                "BMP",
+                "png",
+                "PNG",
+                "tif",
+                "TIF",
+                "tiff",
+                "TIFF",
+            ]
 
-            image_list = [fn for fn in os.listdir(file_dir)
-                          if any(fn.endswith(ext) for ext in included_extensions)]
+            image_list = [
+                fn
+                for fn in os.listdir(file_dir)
+                if any(fn.endswith(ext) for ext in included_extensions)
+            ]
         else:
             image_list = selected_image_list
 
@@ -714,8 +880,15 @@ class Gen_mask:
             bottom_extend = target_height - y2
             right_extend = target_width - x2
 
-            extend_img = cv2.copyMakeBorder(img, top_extend, bottom_extend, left_extend, right_extend,
-                                            cv2.BORDER_CONSTANT, value=[0, 0, 0])
+            extend_img = cv2.copyMakeBorder(
+                img,
+                top_extend,
+                bottom_extend,
+                left_extend,
+                right_extend,
+                cv2.BORDER_CONSTANT,
+                value=[0, 0, 0],
+            )
 
             # Still in 8-bit gray format
             # 2020-2-29: Need to try if we can get it back to color image
@@ -732,7 +905,7 @@ class Gen_mask:
             #           label near the meteor object.
 
             # string_to_match = '_pos_('
-            string_to_match = '_gray_256_mask_'
+            string_to_match = "_gray_256_mask_"
 
             str_pos = image_file.find(string_to_match)
 
@@ -743,16 +916,18 @@ class Gen_mask:
             file_to_save = os.path.join(save_dir, filename_to_save)
 
             # cv2.imwrite(file_to_save, extend_img, [cv2.IMWRITE_PNG_COMPRESSION, 3])
-            cv2.imencode(file_ext, extend_img, [cv2.IMWRITE_PNG_COMPRESSION, 3])[1].tofile(file_to_save)
+            cv2.imencode(file_ext, extend_img, [cv2.IMWRITE_PNG_COMPRESSION, 3])[
+                1
+            ].tofile(file_to_save)
 
             # 2020-7-4:
             # Add the file name as the label to the image, and save to another location
-            string_to_match = '_center_('
+            string_to_match = "_center_("
             str_pos = image_file.find(string_to_match)
 
             if str_pos > -1:
-                str_x_c = image_file[str_pos + 9:str_pos + 14]
-                str_y_c = image_file[str_pos + 15:str_pos + 20]
+                str_x_c = image_file[str_pos + 9 : str_pos + 14]
+                str_y_c = image_file[str_pos + 15 : str_pos + 20]
 
                 x_c = int(str_x_c)
                 y_c = int(str_y_c) - 16
@@ -767,11 +942,13 @@ class Gen_mask:
             # The short file name would be:
             #     ER4A3109_r_0001
             label_name = image_file
-            string_to_match = '_pos_('
+            string_to_match = "_pos_("
             str_pos = image_file.find(string_to_match)
 
             if str_pos > -1:
-                label_name = image_file[0:str_pos - 24] + image_file[str_pos - 5:str_pos]
+                label_name = (
+                    image_file[0 : str_pos - 24] + image_file[str_pos - 5 : str_pos]
+                )
 
             im_rgb = cv2.cvtColor(extend_img, cv2.COLOR_BGRA2RGBA)
             pil_im = Image.fromarray(im_rgb)
@@ -782,14 +959,14 @@ class Gen_mask:
             # b, g, r = pil_im.split()
             # pil_im = Image.merge("RGB", (r, g, b))
 
-            '''
+            """
             cv2.putText(extend_img, label_name,
                         (x_c, y_c),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         fontScale=3,
                         color=(0, 255, 255),
                         lineType=2)
-            '''
+            """
             file_to_save = os.path.join(label_save_dir, filename_to_save)
 
             pil_im.save(file_to_save, "PNG")
@@ -799,11 +976,24 @@ class Gen_mask:
             # sleep(0.02)
         # end for loop
 
-    def extend_extracted_objects_to_original_photo_size_by_multi_threading(self, file_dir, save_dir, label_save_dir,
-                                                                           verbose=1):
+    def extend_extracted_objects_to_original_photo_size_by_multi_threading(
+        self, file_dir, save_dir, label_save_dir, verbose=1
+    ):
         print("\nExtending the extracted objects back to original photo size ...")
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff',
-                               'TIFF']
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -811,8 +1001,11 @@ class Gen_mask:
         if not os.path.exists(label_save_dir):
             os.mkdir(label_save_dir)
 
-        image_list = [fn for fn in os.listdir(file_dir)
-                      if any(fn.endswith(ext) for ext in included_extensions)]
+        image_list = [
+            fn
+            for fn in os.listdir(file_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         CPU_count = multiprocessing.cpu_count()
 
@@ -825,7 +1018,11 @@ class Gen_mask:
         num_image_list = len(image_list)
 
         size_per_sublist = math.ceil(num_image_list / CPU_count)
-        print('    Totally {} images to be processed by {} CPU cores'.format(num_image_list, CPU_count))
+        print(
+            "    Totally {} images to be processed by {} CPU cores".format(
+                num_image_list, CPU_count
+            )
+        )
         print("    Each core to handle {} images".format(size_per_sublist))
 
         thread_set = []
@@ -851,23 +1048,33 @@ class Gen_mask:
             num = size_per_sublist
             if start_from + num > num_image_list:
                 # (num_image_list-1) is the maximum index of the list
-                num = (num_image_list-1)-start_from+1
+                num = (num_image_list - 1) - start_from + 1
 
             # print('\nThread-{0:03d}:'.format(i))
             # print(start_from)
             # print(num)
 
-            subset_image_list = image_list[start_from:start_from+num]
+            subset_image_list = image_list[start_from : start_from + num]
             # print(subset_image_list)
 
-            thread_set.append(threading.Thread(target=self.extend_extracted_objects_to_original_photo_size,
-                                               args=(file_dir, save_dir, label_save_dir, subset_image_list, verbose)))
+            thread_set.append(
+                threading.Thread(
+                    target=self.extend_extracted_objects_to_original_photo_size,
+                    args=(
+                        file_dir,
+                        save_dir,
+                        label_save_dir,
+                        subset_image_list,
+                        verbose,
+                    ),
+                )
+            )
 
         # thread_set = [myThread(i + 1, "Thread-{0:03d}".format(i + 1), start_from, num) for i in range(NUM_OF_THREADS)]
 
         for index, thread_process in enumerate(thread_set):
             thread_process.start()
-            print('    Thread # {0:03d} started ...'.format(index))
+            print("    Thread # {0:03d} started ...".format(index))
 
         for thread_process in thread_set:
             thread_process.join()
@@ -882,16 +1089,33 @@ class Gen_mask:
     #
     # 2020-7-4: This is no need to use now. The function is combined to
     #           self.extend_extracted_objects_to_original_photo_size
-    def print_filename_label_to_individual_final_image(self, file_dir, save_dir, verbose=1):
+    def print_filename_label_to_individual_final_image(
+        self, file_dir, save_dir, verbose=1
+    ):
         print("\nGenerating files with label ...")
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff',
-                               'TIFF']
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
 
-        image_list = [fn for fn in os.listdir(file_dir)
-                      if any(fn.endswith(ext) for ext in included_extensions)]
+        image_list = [
+            fn
+            for fn in os.listdir(file_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         try:
             ttFont = ImageFont.truetype("arial.ttf", 16)
@@ -908,12 +1132,12 @@ class Gen_mask:
             # x0 = int((x1 + x2) / 2)
             # y0 = int((y1 + y2) / 2) - 20
 
-            string_to_match = '_center_('
+            string_to_match = "_center_("
             str_pos = image_file.find(string_to_match)
 
             if str_pos > -1:
-                str_x_c = image_file[str_pos + 9:str_pos + 14]
-                str_y_c = image_file[str_pos + 15:str_pos + 20]
+                str_x_c = image_file[str_pos + 9 : str_pos + 14]
+                str_y_c = image_file[str_pos + 15 : str_pos + 20]
 
                 x_c = int(str_x_c)
                 y_c = int(str_y_c) - 16
@@ -933,11 +1157,13 @@ class Gen_mask:
 
             label_name = image_file
 
-            string_to_match = '_pos_('
+            string_to_match = "_pos_("
             str_pos = image_file.find(string_to_match)
 
             if str_pos > -1:
-                label_name = image_file[0:str_pos-24] + image_file[str_pos-5:str_pos]
+                label_name = (
+                    image_file[0 : str_pos - 24] + image_file[str_pos - 5 : str_pos]
+                )
 
             draw.text((x_c, y_c), label_name, fill=(0, 255, 255), font=ttFont)
 
@@ -945,15 +1171,33 @@ class Gen_mask:
             im.save(file_to_save, "PNG")
         # end for loop
 
-    def combine_meteor_images_to_one(self, meteor_dir, save_dir, specified_filename='final.png', verbose=1):
+    def combine_meteor_images_to_one(
+        self, meteor_dir, save_dir, specified_filename="final.png", verbose=1
+    ):
         print("\nCombining the meteor images to {} ...".format(specified_filename))
-        included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff', 'TIFF']
+        included_extensions = [
+            "jpg",
+            "JPG",
+            "jpeg",
+            "JPEG",
+            "bmp",
+            "BMP",
+            "png",
+            "PNG",
+            "tif",
+            "TIF",
+            "tiff",
+            "TIFF",
+        ]
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
 
-        meteor_list = [fn for fn in os.listdir(meteor_dir)
-                       if any(fn.endswith(ext) for ext in included_extensions)]
+        meteor_list = [
+            fn
+            for fn in os.listdir(meteor_dir)
+            if any(fn.endswith(ext) for ext in included_extensions)
+        ]
 
         if len(meteor_list) == 0:
             print("No image file in folder {}".format(meteor_dir))
@@ -983,4 +1227,4 @@ class Gen_mask:
         file_to_save = specified_filename
         file_to_save = os.path.join(save_dir, file_to_save)
 
-        combined_img.save(file_to_save, 'PNG')
+        combined_img.save(file_to_save, "PNG")

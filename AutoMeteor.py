@@ -24,25 +24,39 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 
 def get_folder_list(processFolder):
-    process_dir = os.path.join(processFolder, 'process')
-    detection_dir = os.path.join(process_dir, '01_detection')
-    extracted_dir = os.path.join(process_dir, '02_cropped')
-    filtered_dir = os.path.join(process_dir, '03_filtered')
-    keep_dir = os.path.join(filtered_dir, 'good')
-    removed_dir = os.path.join(filtered_dir, 'removed')
-    mosaic_dir = os.path.join(process_dir, '04_mosaic')
-    gray_256_dir = os.path.join(process_dir, '05_gray_256')
-    mask_256_dir = os.path.join(process_dir, '06_mask_256')
-    mask_resize_back_dir = os.path.join(process_dir, '07_mask_resize_back')
-    mosaic_merge_back_dir = os.path.join(process_dir, '08_mosaic_merged_back')
-    object_extracted_dir = os.path.join(process_dir, '09_object_extracted')
-    FINAL_dir = os.path.join(process_dir, '10_FINAL')
-    FINAL_w_label_dir = os.path.join(process_dir, '10_FINAL_w_label')
-    FINAL_combined_dir = os.path.join(process_dir, '11_FINAL_combined')
+    process_dir = os.path.join(processFolder, "process")
+    detection_dir = os.path.join(process_dir, "01_detection")
+    extracted_dir = os.path.join(process_dir, "02_cropped")
+    filtered_dir = os.path.join(process_dir, "03_filtered")
+    keep_dir = os.path.join(filtered_dir, "good")
+    removed_dir = os.path.join(filtered_dir, "removed")
+    mosaic_dir = os.path.join(process_dir, "04_mosaic")
+    gray_256_dir = os.path.join(process_dir, "05_gray_256")
+    mask_256_dir = os.path.join(process_dir, "06_mask_256")
+    mask_resize_back_dir = os.path.join(process_dir, "07_mask_resize_back")
+    mosaic_merge_back_dir = os.path.join(process_dir, "08_mosaic_merged_back")
+    object_extracted_dir = os.path.join(process_dir, "09_object_extracted")
+    FINAL_dir = os.path.join(process_dir, "10_FINAL")
+    FINAL_w_label_dir = os.path.join(process_dir, "10_FINAL_w_label")
+    FINAL_combined_dir = os.path.join(process_dir, "11_FINAL_combined")
 
-    return process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir,\
-           mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-           object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir
+    return (
+        process_dir,
+        detection_dir,
+        extracted_dir,
+        filtered_dir,
+        keep_dir,
+        removed_dir,
+        mosaic_dir,
+        gray_256_dir,
+        mask_256_dir,
+        mask_resize_back_dir,
+        mosaic_merge_back_dir,
+        object_extracted_dir,
+        FINAL_dir,
+        FINAL_w_label_dir,
+        FINAL_combined_dir,
+    )
 
 
 def Step_1_Process_Detection(processFolder, is_equatorial_mount):
@@ -54,19 +68,35 @@ def Step_1_Process_Detection(processFolder, is_equatorial_mount):
     # keep_dir = os.path.join(filtered_dir, 'good')
     # removed_dir = os.path.join(filtered_dir, 'removed')
 
-    process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-    mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-    object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(processFolder)
+    (
+        process_dir,
+        detection_dir,
+        extracted_dir,
+        filtered_dir,
+        keep_dir,
+        removed_dir,
+        mosaic_dir,
+        gray_256_dir,
+        mask_256_dir,
+        mask_resize_back_dir,
+        mosaic_merge_back_dir,
+        object_extracted_dir,
+        FINAL_dir,
+        FINAL_w_label_dir,
+        FINAL_combined_dir,
+    ) = get_folder_list(processFolder)
 
     print("\n\n==========================================================")
     print("Starting step 1 processing ...")
 
-    detection.multi_thread_process_detect_n_extract_meteor_from_folder(original_dir,
-                                                                       process_dir,
-                                                                       subtraction=True,
-                                                                       # subtraction=False,
-                                                                       equatorial_mount=is_equatorial_mount,
-                                                                       verbose=1)
+    detection.multi_thread_process_detect_n_extract_meteor_from_folder(
+        original_dir,
+        process_dir,
+        subtraction=True,
+        # subtraction=False,
+        equatorial_mount=is_equatorial_mount,
+        verbose=1,
+    )
 
     detection.filter_possible_not_meteor_objects(extracted_dir, keep_dir, removed_dir)
 
@@ -90,7 +120,6 @@ def Step_1_Process_Detection(processFolder, is_equatorial_mount):
 # So we need to invoke a new sub-thread from the main thread first.
 # And this sub-thread will call the detection procedure.
 class Detection_sub_thread_called_by_main(threading.Thread, QObject):
-
     detection_finish_signal = pyqtSignal()
 
     def __init__(self, processFolder, is_equatorial_mount):
@@ -121,20 +150,38 @@ def Step_3_Generate_Mask(processFolder):
     # mask_resize_back_dir = os.path.join(process_dir, '07_mask_resize_back')
     # mosaic_merge_back_dir = os.path.join(process_dir, '08_mosaic_merged_back')
 
-    process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-    mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-    object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(processFolder)
+    (
+        process_dir,
+        detection_dir,
+        extracted_dir,
+        filtered_dir,
+        keep_dir,
+        removed_dir,
+        mosaic_dir,
+        gray_256_dir,
+        mask_256_dir,
+        mask_resize_back_dir,
+        mosaic_merge_back_dir,
+        object_extracted_dir,
+        FINAL_dir,
+        FINAL_w_label_dir,
+        FINAL_combined_dir,
+    ) = get_folder_list(processFolder)
 
     print("\n\n==========================================================")
     print("Starting step 3 processing ...")
 
     my_gen_mask = gen_mask.Gen_mask()
 
-    my_gen_mask.convert_cropped_image_folder_to_mosaic_for_big_files(keep_dir, mosaic_dir)
+    my_gen_mask.convert_cropped_image_folder_to_mosaic_for_big_files(
+        keep_dir, mosaic_dir
+    )
     my_gen_mask.convert_image_folder_to_gray_256(mosaic_dir, gray_256_dir)
     my_gen_mask.gen_meteor_mask_from_folder(gray_256_dir, mask_256_dir)
     my_gen_mask.resize_mask_to_original_cropped_size(mask_256_dir, mask_resize_back_dir)
-    my_gen_mask.mosaic_mask_files_merge_back(mask_resize_back_dir, mosaic_merge_back_dir)
+    my_gen_mask.mosaic_mask_files_merge_back(
+        mask_resize_back_dir, mosaic_merge_back_dir
+    )
 
     # del my_gen_mask
 
@@ -148,7 +195,6 @@ def Step_3_Generate_Mask(processFolder):
 
 
 class Genmask_sub_thread_called_by_main(threading.Thread, QObject):
-
     genmask_finish_signal = pyqtSignal()
 
     def __init__(self, processFolder):
@@ -181,26 +227,43 @@ def Step_5_Generate_Final(processFolder):
     # FINAL_w_label_dir = os.path.join(process_dir, '10_FINAL_w_label')
     # FINAL_combined_dir = os.path.join(process_dir, '11_FINAL_combined')
 
-    process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-    mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-    object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(processFolder)
+    (
+        process_dir,
+        detection_dir,
+        extracted_dir,
+        filtered_dir,
+        keep_dir,
+        removed_dir,
+        mosaic_dir,
+        gray_256_dir,
+        mask_256_dir,
+        mask_resize_back_dir,
+        mosaic_merge_back_dir,
+        object_extracted_dir,
+        FINAL_dir,
+        FINAL_w_label_dir,
+        FINAL_combined_dir,
+    ) = get_folder_list(processFolder)
 
     print("\n\n==========================================================")
     print("Starting step 5 processing ...")
 
     my_gen_mask = gen_mask.Gen_mask()
 
-    my_gen_mask.extract_meteor_from_original_folder_with_mask(original_dir,
-                                                              mosaic_merge_back_dir,
-                                                              object_extracted_dir,
-                                                              verbose=1)
+    my_gen_mask.extract_meteor_from_original_folder_with_mask(
+        original_dir, mosaic_merge_back_dir, object_extracted_dir, verbose=1
+    )
 
-    my_gen_mask.extend_extracted_objects_to_original_photo_size_by_multi_threading(object_extracted_dir,
-                                                                                   FINAL_dir,
-                                                                                   FINAL_w_label_dir)
+    my_gen_mask.extend_extracted_objects_to_original_photo_size_by_multi_threading(
+        object_extracted_dir, FINAL_dir, FINAL_w_label_dir
+    )
 
-    my_gen_mask.combine_meteor_images_to_one(FINAL_dir, FINAL_combined_dir, 'final.png', verbose=1)
-    my_gen_mask.combine_meteor_images_to_one(FINAL_w_label_dir, FINAL_combined_dir, 'final_w_label.png', verbose=1)
+    my_gen_mask.combine_meteor_images_to_one(
+        FINAL_dir, FINAL_combined_dir, "final.png", verbose=1
+    )
+    my_gen_mask.combine_meteor_images_to_one(
+        FINAL_w_label_dir, FINAL_combined_dir, "final_w_label.png", verbose=1
+    )
 
     print("\n==========================================================")
     print("Final output files generation finished!")
@@ -208,7 +271,6 @@ def Step_5_Generate_Final(processFolder):
 
 
 class Final_sub_thread_called_by_main(threading.Thread, QObject):
-
     final_finish_signal = pyqtSignal()
 
     def __init__(self, processFolder):
@@ -255,15 +317,17 @@ class MyMainForm(QMainWindow):
         # self.ui.groupBox_3.resize(400, self.ui.groupBox_3.size().height())
 
         # logoPixMap = QPixmap('images/GZSA-logo-240.jpg')
-        logoPixMap = QPixmap('images/GZSA-logo-160.jpg')
+        logoPixMap = QPixmap("images/GZSA-logo-160.jpg")
         self.ui.logoLabel.setPixmap(logoPixMap)
 
-        meteorPixMap = QPixmap('images/Meteor_shower_190.jpg')
+        meteorPixMap = QPixmap("images/Meteor_shower_190.jpg")
         self.ui.meteorLabel.setPixmap(meteorPixMap)
 
         self.ui.selectFolderButton.clicked.connect(self.displayFolderDialog)
         self.ui.doDetectionButton.clicked.connect(self.Step_1_DoDetection)
-        self.ui.openDetectionFolderButton.clicked.connect(self.Step_2_OpenDetectionFolder)
+        self.ui.openDetectionFolderButton.clicked.connect(
+            self.Step_2_OpenDetectionFolder
+        )
 
         self.ui.generateMaskButton.clicked.connect(self.Step_3_DoGenerateMask)
         self.ui.openMaskFolderButton.clicked.connect(self.Step_4_OpenMaskFolder)
@@ -277,7 +341,9 @@ class MyMainForm(QMainWindow):
         self.change_GUI_control_status(False)
         self.ui.selectFolderButton.setEnabled(True)
         # self.ui.selectFolderButton.setStyleSheet("background-color: rgb(205, 205, 205)")
-        self.ui.selectFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
+        self.ui.selectFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+        )
 
         self.stdoutbak = sys.stdout
         self.stderrbak = sys.stderr
@@ -328,12 +394,18 @@ class MyMainForm(QMainWindow):
         # if e.size().width() > 1440:
         if e.size().width() > 1600:
             # Here the 1024 is the form height. Then 770 is the height of the groupBox_3
-            self.ui.groupBox_3.resize(self.ui.groupBox_3.size().width(), e.size().height() - (1024 - 770) + 8)
+            self.ui.groupBox_3.resize(
+                self.ui.groupBox_3.size().width(), e.size().height() - (1024 - 770) + 8
+            )
 
-            self.ui.groupBox.resize(self.ui.groupBox.size().width(), e.size().height() - 35)
+            self.ui.groupBox.resize(
+                self.ui.groupBox.size().width(), e.size().height() - 35
+            )
 
             # Here the 1600 is the form width. Then 751 is the width of the groupBox_2
-            self.ui.groupBox_2.resize(e.size().width() - 1600 + 751 - 10, e.size().height()-35)
+            self.ui.groupBox_2.resize(
+                e.size().width() - 1600 + 751 - 10, e.size().height() - 35
+            )
         QtWidgets.QWidget.resizeEvent(self, e)
 
     def change_GUI_control_status(self, status):
@@ -347,28 +419,56 @@ class MyMainForm(QMainWindow):
         self.ui.openFinalFolderButton.setEnabled(status)
 
         if status:
-            self.ui.selectFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
+            self.ui.selectFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+            )
             # self.ui.isEQmountCheckBox.setStyleSheet("color: rgb(0, 0, 255)")
-            self.ui.doDetectionButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
-            self.ui.openDetectionFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
-            self.ui.generateMaskButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
-            self.ui.openMaskFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
-            self.ui.generateFinalButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
-            self.ui.openFinalFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
+            self.ui.doDetectionButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+            )
+            self.ui.openDetectionFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+            )
+            self.ui.generateMaskButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+            )
+            self.ui.openMaskFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+            )
+            self.ui.generateFinalButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+            )
+            self.ui.openFinalFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+            )
         else:
-            self.ui.selectFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)")
+            self.ui.selectFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)"
+            )
             # self.ui.isEQmountCheckBox.setStyleSheet("color: rgb(244, 244, 244)")
-            self.ui.doDetectionButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)")
-            self.ui.openDetectionFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)")
-            self.ui.generateMaskButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)")
-            self.ui.openMaskFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)")
-            self.ui.generateFinalButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)")
-            self.ui.openFinalFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)")
+            self.ui.doDetectionButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)"
+            )
+            self.ui.openDetectionFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)"
+            )
+            self.ui.generateMaskButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)"
+            )
+            self.ui.openMaskFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)"
+            )
+            self.ui.generateFinalButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)"
+            )
+            self.ui.openFinalFolderButton.setStyleSheet(
+                "background-color: rgb(205, 205, 205);color: rgb(120, 120, 120)"
+            )
 
     def displayFolderDialog(self):
         # self.ui.displayText.setText("Button clicked")
 
-        dialog = QFileDialog(self, 'Image files', directory='')
+        dialog = QFileDialog(self, "Image files", directory="")
         dialog.setFileMode(QFileDialog.DirectoryOnly)
         # dialog.setSidebarUrls([QtCore.QUrl.fromLocalFile(place)])
 
@@ -378,42 +478,76 @@ class MyMainForm(QMainWindow):
             self.ui.folderNameText.setText(fileDir)
             self.processFolder = fileDir
 
-            included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG', 'tif', 'TIF', 'tiff',
-                                   'TIFF']
+            included_extensions = [
+                "jpg",
+                "JPG",
+                "jpeg",
+                "JPEG",
+                "bmp",
+                "BMP",
+                "png",
+                "PNG",
+                "tif",
+                "TIF",
+                "tiff",
+                "TIFF",
+            ]
             # 2022-1-8:
             # TIF seems sometimes difficult...
             # Some cameras have 48bit TIF which we cannot process right now
             # included_extensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'bmp', 'BMP', 'png', 'PNG']
             #
             # Let's still support TIF, but give a warning
-            photo_list = [fn for fn in os.listdir(self.processFolder)
-                         if any(fn.endswith(ext) for ext in included_extensions)]
+            photo_list = [
+                fn
+                for fn in os.listdir(self.processFolder)
+                if any(fn.endswith(ext) for ext in included_extensions)
+            ]
 
             file_num = len(photo_list)
             fileList2View = QStringListModel()
             fileList2View.setStringList(photo_list)
             self.ui.listView.setModel(fileList2View)
-            self.ui.fileNumberLabel.setText("{} image file(s) in the list".format(file_num))
+            self.ui.fileNumberLabel.setText(
+                "{} image file(s) in the list".format(file_num)
+            )
             if file_num > 0:
                 # self.ui.doDetectionButton.setEnabled(True)
                 self.change_GUI_control_status(True)
             else:
                 self.change_GUI_control_status(False)
                 self.ui.selectFolderButton.setEnabled(True)
-                self.ui.selectFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)")
+                self.ui.selectFolderButton.setStyleSheet(
+                    "background-color: rgb(205, 205, 205);color: rgb(0, 0, 255)"
+                )
 
     def Step_1_DoDetection(self):
         if self.processFolder != "":
-
-            process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-            mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-            object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(self.processFolder)
+            (
+                process_dir,
+                detection_dir,
+                extracted_dir,
+                filtered_dir,
+                keep_dir,
+                removed_dir,
+                mosaic_dir,
+                gray_256_dir,
+                mask_256_dir,
+                mask_resize_back_dir,
+                mosaic_merge_back_dir,
+                object_extracted_dir,
+                FINAL_dir,
+                FINAL_w_label_dir,
+                FINAL_combined_dir,
+            ) = get_folder_list(self.processFolder)
 
             if os.path.exists(keep_dir):
                 msg = QMessageBox()
                 msg.setWindowTitle("Confirmation needed")
-                msg.setText("It seems the object detection for this folder had been done before. \
-                                    \n\nDo you want to clean up the previous output data and re-run ?")
+                msg.setText(
+                    "It seems the object detection for this folder had been done before. \
+                                    \n\nDo you want to clean up the previous output data and re-run ?"
+                )
                 msg.setIcon(QMessageBox.Question)
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
                 msg.setDefaultButton(QMessageBox.No)
@@ -442,8 +576,12 @@ class MyMainForm(QMainWindow):
             if self.ui.isEQmountCheckBox.checkState() == QtCore.Qt.Checked:
                 is_equatorial_mount = True
 
-            process_thread = Detection_sub_thread_called_by_main(self.processFolder, is_equatorial_mount)
-            process_thread.detection_finish_signal.connect(self.Step_1_Detection_Process_Finsihed)
+            process_thread = Detection_sub_thread_called_by_main(
+                self.processFolder, is_equatorial_mount
+            )
+            process_thread.detection_finish_signal.connect(
+                self.Step_1_Detection_Process_Finsihed
+            )
 
             self.change_GUI_control_status(False)
             process_thread.start()
@@ -454,7 +592,9 @@ class MyMainForm(QMainWindow):
 
     def Step_2_OpenDetectionFolder(self):
         if self.processFolder == "":
-            QMessageBox.information(self, "Info", "No image folder selected", QMessageBox.Ok)
+            QMessageBox.information(
+                self, "Info", "No image folder selected", QMessageBox.Ok
+            )
             return
 
         # original_dir = self.processFolder
@@ -464,14 +604,30 @@ class MyMainForm(QMainWindow):
         # keep_dir = os.path.join(filtered_dir, 'good')
         # removed_dir = os.path.join(filtered_dir, 'removed')
 
-        process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-        mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-        object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(self.processFolder)
+        (
+            process_dir,
+            detection_dir,
+            extracted_dir,
+            filtered_dir,
+            keep_dir,
+            removed_dir,
+            mosaic_dir,
+            gray_256_dir,
+            mask_256_dir,
+            mask_resize_back_dir,
+            mosaic_merge_back_dir,
+            object_extracted_dir,
+            FINAL_dir,
+            FINAL_w_label_dir,
+            FINAL_combined_dir,
+        ) = get_folder_list(self.processFolder)
 
         if not os.path.exists(keep_dir) or not os.path.exists(removed_dir):
             msg = QMessageBox()
             msg.setWindowTitle("Info")
-            msg.setText("Seems object detection not performed yet. \n\nPlease try step 1 first.")
+            msg.setText(
+                "Seems object detection not performed yet. \n\nPlease try step 1 first."
+            )
             msg.setIcon(QMessageBox.Information)
             msg.setStandardButtons(QMessageBox.Ok)
             msg.setStyleSheet("QLabel{ color: white}")
@@ -494,9 +650,23 @@ class MyMainForm(QMainWindow):
         # keep_dir = os.path.join(filtered_dir, 'good')
         # removed_dir = os.path.join(filtered_dir, 'removed')
 
-        process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-        mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-        object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(self.processFolder)
+        (
+            process_dir,
+            detection_dir,
+            extracted_dir,
+            filtered_dir,
+            keep_dir,
+            removed_dir,
+            mosaic_dir,
+            gray_256_dir,
+            mask_256_dir,
+            mask_resize_back_dir,
+            mosaic_merge_back_dir,
+            object_extracted_dir,
+            FINAL_dir,
+            FINAL_w_label_dir,
+            FINAL_combined_dir,
+        ) = get_folder_list(self.processFolder)
 
         if not os.path.exists(keep_dir):
             # QMessageBox.information(self, "Info",
@@ -505,7 +675,9 @@ class MyMainForm(QMainWindow):
 
             msg = QMessageBox()
             msg.setWindowTitle("Info")
-            msg.setText("Seems object detection not performed yet. \n\nPlease try step 1 first.")
+            msg.setText(
+                "Seems object detection not performed yet. \n\nPlease try step 1 first."
+            )
             msg.setIcon(QMessageBox.Information)
             msg.setStandardButtons(QMessageBox.Ok)
             msg.setStyleSheet("QLabel{ color: white}")
@@ -516,8 +688,10 @@ class MyMainForm(QMainWindow):
         if os.path.exists(mosaic_merge_back_dir):
             msg = QMessageBox()
             msg.setWindowTitle("Confirmation needed")
-            msg.setText("It seems the mask generation for this folder had been done before. \
-                                    \n\nDo you want to clean up the previous output data and re-run ?")
+            msg.setText(
+                "It seems the mask generation for this folder had been done before. \
+                                    \n\nDo you want to clean up the previous output data and re-run ?"
+            )
             msg.setIcon(QMessageBox.Question)
             msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
             msg.setStyleSheet("QLabel{ color: white}")
@@ -556,7 +730,9 @@ class MyMainForm(QMainWindow):
                 return
 
         process_thread = Genmask_sub_thread_called_by_main(self.processFolder)
-        process_thread.genmask_finish_signal.connect(self.Step_3_GenMask_Process_Finsihed)
+        process_thread.genmask_finish_signal.connect(
+            self.Step_3_GenMask_Process_Finsihed
+        )
 
         self.change_GUI_control_status(False)
         process_thread.start()
@@ -591,9 +767,23 @@ class MyMainForm(QMainWindow):
         # mask_resize_back_dir = os.path.join(process_dir, '07_mask_resize_back')
         # mosaic_merge_back_dir = os.path.join(process_dir, '08_mosaic_merged_back')
 
-        process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-        mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-        object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(self.processFolder)
+        (
+            process_dir,
+            detection_dir,
+            extracted_dir,
+            filtered_dir,
+            keep_dir,
+            removed_dir,
+            mosaic_dir,
+            gray_256_dir,
+            mask_256_dir,
+            mask_resize_back_dir,
+            mosaic_merge_back_dir,
+            object_extracted_dir,
+            FINAL_dir,
+            FINAL_w_label_dir,
+            FINAL_combined_dir,
+        ) = get_folder_list(self.processFolder)
 
         if not os.path.exists(mosaic_merge_back_dir):
             # QMessageBox.information(self, "Info",
@@ -601,7 +791,9 @@ class MyMainForm(QMainWindow):
             #                         QMessageBox.Ok)
             msg = QMessageBox()
             msg.setWindowTitle("Info")
-            msg.setText("Seems mask file not generated yet. \n\nPlease try step 3 first.")
+            msg.setText(
+                "Seems mask file not generated yet. \n\nPlease try step 3 first."
+            )
             msg.setIcon(QMessageBox.Information)
             msg.setStandardButtons(QMessageBox.Ok)
             msg.setStyleSheet("QLabel{ color: white}")
@@ -637,9 +829,23 @@ class MyMainForm(QMainWindow):
         # mask_resize_back_dir = os.path.join(process_dir, '07_mask_resize_back')
         # mosaic_merge_back_dir = os.path.join(process_dir, '08_mosaic_merged_back')
 
-        process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-        mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-        object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(self.processFolder)
+        (
+            process_dir,
+            detection_dir,
+            extracted_dir,
+            filtered_dir,
+            keep_dir,
+            removed_dir,
+            mosaic_dir,
+            gray_256_dir,
+            mask_256_dir,
+            mask_resize_back_dir,
+            mosaic_merge_back_dir,
+            object_extracted_dir,
+            FINAL_dir,
+            FINAL_w_label_dir,
+            FINAL_combined_dir,
+        ) = get_folder_list(self.processFolder)
 
         if not os.path.exists(mosaic_merge_back_dir):
             # QMessageBox.information(self, "Info",
@@ -648,7 +854,9 @@ class MyMainForm(QMainWindow):
 
             msg = QMessageBox()
             msg.setWindowTitle("Info")
-            msg.setText("Seems mask file not generated yet. \n\nPlease try step 3 first.")
+            msg.setText(
+                "Seems mask file not generated yet. \n\nPlease try step 3 first."
+            )
             msg.setIcon(QMessageBox.Information)
             msg.setStandardButtons(QMessageBox.Ok)
             msg.setStyleSheet("QLabel{ color: white}")
@@ -659,8 +867,10 @@ class MyMainForm(QMainWindow):
         if os.path.exists(FINAL_combined_dir):
             msg = QMessageBox()
             msg.setWindowTitle("Confirmation needed")
-            msg.setText("It seems the final output generation for this folder had been done before. \
-                                    \n\nDo you want to clean up the previous output data and re-run ?")
+            msg.setText(
+                "It seems the final output generation for this folder had been done before. \
+                                    \n\nDo you want to clean up the previous output data and re-run ?"
+            )
             msg.setIcon(QMessageBox.Question)
             msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
             msg.setStyleSheet("QLabel{ color: white}")
@@ -734,20 +944,38 @@ class MyMainForm(QMainWindow):
         # FINAL_w_label_dir = os.path.join(process_dir, '10_FINAL_w_label')
         # FINAL_combined_dir = os.path.join(process_dir, '11_FINAL_combined')
 
-        process_dir, detection_dir, extracted_dir, filtered_dir, keep_dir, removed_dir, \
-        mosaic_dir, gray_256_dir, mask_256_dir, mask_resize_back_dir, mosaic_merge_back_dir, \
-        object_extracted_dir, FINAL_dir, FINAL_w_label_dir, FINAL_combined_dir = get_folder_list(self.processFolder)
+        (
+            process_dir,
+            detection_dir,
+            extracted_dir,
+            filtered_dir,
+            keep_dir,
+            removed_dir,
+            mosaic_dir,
+            gray_256_dir,
+            mask_256_dir,
+            mask_resize_back_dir,
+            mosaic_merge_back_dir,
+            object_extracted_dir,
+            FINAL_dir,
+            FINAL_w_label_dir,
+            FINAL_combined_dir,
+        ) = get_folder_list(self.processFolder)
 
-        if not os.path.exists(FINAL_dir) \
-                or not os.path.exists(FINAL_w_label_dir) \
-                or not os.path.exists(FINAL_combined_dir):
+        if (
+            not os.path.exists(FINAL_dir)
+            or not os.path.exists(FINAL_w_label_dir)
+            or not os.path.exists(FINAL_combined_dir)
+        ):
             # QMessageBox.information(self, "Info",
             #                         "Seems the final output files are not generated yet. \n\nPlease try step 5 first.",
             #                         QMessageBox.Ok)
 
             msg = QMessageBox()
             msg.setWindowTitle("Info")
-            msg.setText("Seems the final output files are not generated yet. \n\nPlease try step 5 first.")
+            msg.setText(
+                "Seems the final output files are not generated yet. \n\nPlease try step 5 first."
+            )
             msg.setIcon(QMessageBox.Information)
             msg.setStandardButtons(QMessageBox.Ok)
             msg.setStyleSheet("QLabel{ color: white}")

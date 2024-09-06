@@ -62,8 +62,9 @@ class Ui_MainWindow(object):
         font.setFamily("微软雅黑")
         font.setPointSize(10)
         self.selectFolderButton.setFont(font)
-        self.selectFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.selectFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.selectFolderButton.setObjectName("selectFolderButton")
         self.verticalLayout_3.addWidget(self.selectFolderButton)
         self.label_2 = QtWidgets.QLabel(self.groupBox_3)
@@ -85,8 +86,9 @@ class Ui_MainWindow(object):
         font.setFamily("Arial")
         font.setPointSize(10)
         self.listView.setFont(font)
-        self.listView.setStyleSheet("background-color: rgb(43, 43, 43);\n"
-"color: rgb(187, 187, 187);")
+        self.listView.setStyleSheet(
+            "background-color: rgb(43, 43, 43);\n" "color: rgb(187, 187, 187);"
+        )
         self.listView.setObjectName("listView")
         self.verticalLayout_3.addWidget(self.listView)
         self.fileNumberLabel = QtWidgets.QLabel(self.groupBox_3)
@@ -149,9 +151,11 @@ class Ui_MainWindow(object):
         font.setFamily("微软雅黑")
         font.setPointSize(10)
         self.doDetectionButton.setFont(font)
-        self.doDetectionButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"alternate-background-color: rgb(187, 187, 187);\n"
-"color: rgb(0, 0, 255);")
+        self.doDetectionButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n"
+            "alternate-background-color: rgb(187, 187, 187);\n"
+            "color: rgb(0, 0, 255);"
+        )
         self.doDetectionButton.setObjectName("doDetectionButton")
         self.verticalLayout.addWidget(self.doDetectionButton)
         self.line = QtWidgets.QFrame(self.groupBox)
@@ -205,8 +209,9 @@ class Ui_MainWindow(object):
         font.setFamily("微软雅黑")
         font.setPointSize(10)
         self.openDetectionFolderButton.setFont(font)
-        self.openDetectionFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.openDetectionFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.openDetectionFolderButton.setObjectName("openDetectionFolderButton")
         self.verticalLayout.addWidget(self.openDetectionFolderButton)
         self.line_2 = QtWidgets.QFrame(self.groupBox)
@@ -231,8 +236,9 @@ class Ui_MainWindow(object):
         font.setFamily("微软雅黑")
         font.setPointSize(10)
         self.generateMaskButton.setFont(font)
-        self.generateMaskButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.generateMaskButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.generateMaskButton.setObjectName("generateMaskButton")
         self.verticalLayout.addWidget(self.generateMaskButton)
         self.line_3 = QtWidgets.QFrame(self.groupBox)
@@ -285,8 +291,9 @@ class Ui_MainWindow(object):
         font.setFamily("微软雅黑")
         font.setPointSize(10)
         self.openMaskFolderButton.setFont(font)
-        self.openMaskFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.openMaskFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.openMaskFolderButton.setObjectName("openMaskFolderButton")
         self.verticalLayout.addWidget(self.openMaskFolderButton)
         self.line_4 = QtWidgets.QFrame(self.groupBox)
@@ -312,8 +319,9 @@ class Ui_MainWindow(object):
         font.setFamily("微软雅黑")
         font.setPointSize(10)
         self.generateFinalButton.setFont(font)
-        self.generateFinalButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.generateFinalButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.generateFinalButton.setObjectName("generateFinalButton")
         self.verticalLayout.addWidget(self.generateFinalButton)
         self.line_7 = QtWidgets.QFrame(self.groupBox)
@@ -339,8 +347,9 @@ class Ui_MainWindow(object):
         font.setFamily("微软雅黑")
         font.setPointSize(10)
         self.openFinalFolderButton.setFont(font)
-        self.openFinalFolderButton.setStyleSheet("background-color: rgb(205, 205, 205);\n"
-"color: rgb(0, 0, 255);")
+        self.openFinalFolderButton.setStyleSheet(
+            "background-color: rgb(205, 205, 205);\n" "color: rgb(0, 0, 255);"
+        )
         self.openFinalFolderButton.setObjectName("openFinalFolderButton")
         self.verticalLayout.addWidget(self.openFinalFolderButton)
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
@@ -358,8 +367,9 @@ class Ui_MainWindow(object):
         font.setFamily("Courier New")
         self.processLogsEdit.setFont(font)
         self.processLogsEdit.setAutoFillBackground(False)
-        self.processLogsEdit.setStyleSheet("background-color: rgb(43, 43, 43);\n"
-"color: rgb(187, 187, 187);")
+        self.processLogsEdit.setStyleSheet(
+            "background-color: rgb(43, 43, 43);\n" "color: rgb(187, 187, 187);"
+        )
         self.processLogsEdit.setReadOnly(True)
         self.processLogsEdit.setObjectName("processLogsEdit")
         self.verticalLayout_2.addWidget(self.processLogsEdit)
@@ -378,7 +388,9 @@ class Ui_MainWindow(object):
         self.label_20.setFont(font)
         self.label_20.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.label_20.setStyleSheet("color: rgb(170, 255, 255);")
-        self.label_20.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_20.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_20.setObjectName("label_20")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -393,33 +405,74 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Auto meteor shower"))
         self.logoLabel.setText(_translate("MainWindow", "Logo"))
         self.groupBox_3.setTitle(_translate("MainWindow", "选择图像文件夹："))
-        self.label.setText(_translate("MainWindow", "注意：图像最好先进行了星点对齐操作 ！"))
+        self.label.setText(
+            _translate("MainWindow", "注意：图像最好先进行了星点对齐操作 ！")
+        )
         self.selectFolderButton.setText(_translate("MainWindow", "选择图像文件夹"))
-        self.label_2.setText(_translate("MainWindow", "此文件夹包含的图像文件 (jpg / bmp / png / tif)"))
-        self.label_17.setText(_translate("MainWindow", "注意：16位深度的 TIF 文件可能无法处理"))
-        self.fileNumberLabel.setText(_translate("MainWindow", "0 image file(s) in the list"))
+        self.label_2.setText(
+            _translate("MainWindow", "此文件夹包含的图像文件 (jpg / bmp / png / tif)")
+        )
+        self.label_17.setText(
+            _translate("MainWindow", "注意：16位深度的 TIF 文件可能无法处理")
+        )
+        self.fileNumberLabel.setText(
+            _translate("MainWindow", "0 image file(s) in the list")
+        )
         self.groupBox.setTitle(_translate("MainWindow", "处理步骤"))
         self.label_4.setText(_translate("MainWindow", "一、 检测流星"))
-        self.isEQmountCheckBox.setText(_translate("MainWindow", " 使用了赤道仪跟踪拍摄"))
+        self.isEQmountCheckBox.setText(
+            _translate("MainWindow", " 使用了赤道仪跟踪拍摄")
+        )
         self.label_15.setText(_translate("MainWindow", "解释："))
-        self.label_16.setText(_translate("MainWindow", "假如这一组的图像使用了赤道仪跟踪拍摄，请在上面打上勾，这有助于提高检测精度。若是固定拍摄又打上勾，速度可能变慢。"))
+        self.label_16.setText(
+            _translate(
+                "MainWindow",
+                "假如这一组的图像使用了赤道仪跟踪拍摄，请在上面打上勾，这有助于提高检测精度。若是固定拍摄又打上勾，速度可能变慢。",
+            )
+        )
         self.doDetectionButton.setText(_translate("MainWindow", "进行流星检测"))
         self.label_5.setText(_translate("MainWindow", "二、 人工检视流星检测过滤结果"))
         self.label_3.setText(_translate("MainWindow", "解释："))
-        self.label_10.setText(_translate("MainWindow", "不可避免地，依然可能会有些目标例如卫星，飞机等会被识别为流星，反之亦然。可进行人工筛选。"))
-        self.label_11.setText(_translate("MainWindow", "“good”文件夹里如果有认为非流星的图像，可以删除。“removed”文件夹里如果有认为是流星的图像，可以将其移到“good”文件夹。"))
-        self.openDetectionFolderButton.setText(_translate("MainWindow", "打开检测结果所在文件夹"))
+        self.label_10.setText(
+            _translate(
+                "MainWindow",
+                "不可避免地，依然可能会有些目标例如卫星，飞机等会被识别为流星，反之亦然。可进行人工筛选。",
+            )
+        )
+        self.label_11.setText(
+            _translate(
+                "MainWindow",
+                "“good”文件夹里如果有认为非流星的图像，可以删除。“removed”文件夹里如果有认为是流星的图像，可以将其移到“good”文件夹。",
+            )
+        )
+        self.openDetectionFolderButton.setText(
+            _translate("MainWindow", "打开检测结果所在文件夹")
+        )
         self.label_6.setText(_translate("MainWindow", "三、 生成流星的蒙板文件"))
         self.generateMaskButton.setText(_translate("MainWindow", "生成流星蒙板"))
         self.label_7.setText(_translate("MainWindow", "四、 人工检视蒙板质量"))
         self.label_13.setText(_translate("MainWindow", "解释："))
-        self.label_12.setText(_translate("MainWindow", "某些情况下，例如流星图像像素比较大，或者流星比较暗，生成的蒙板可能有一些多余的“噪点”，或者对流星个体覆盖不全。可手动对蒙板进行加工。"))
-        self.label_14.setText(_translate("MainWindow", "可用第三方图像处理软件对蒙板文件进行加工。“噪点”可以用黑色抹掉。覆盖不全的情况可以用白色补上。"))
+        self.label_12.setText(
+            _translate(
+                "MainWindow",
+                "某些情况下，例如流星图像像素比较大，或者流星比较暗，生成的蒙板可能有一些多余的“噪点”，或者对流星个体覆盖不全。可手动对蒙板进行加工。",
+            )
+        )
+        self.label_14.setText(
+            _translate(
+                "MainWindow",
+                "可用第三方图像处理软件对蒙板文件进行加工。“噪点”可以用黑色抹掉。覆盖不全的情况可以用白色补上。",
+            )
+        )
         self.openMaskFolderButton.setText(_translate("MainWindow", "打开蒙板文件夹"))
-        self.label_8.setText(_translate("MainWindow", "五、 生成正式的蒙板，提取流星，叠加"))
+        self.label_8.setText(
+            _translate("MainWindow", "五、 生成正式的蒙板，提取流星，叠加")
+        )
         self.generateFinalButton.setText(_translate("MainWindow", "生成最终结果"))
         self.label_9.setText(_translate("MainWindow", "六、 检视输出结果"))
-        self.openFinalFolderButton.setText(_translate("MainWindow", "打开最终结果文件夹"))
+        self.openFinalFolderButton.setText(
+            _translate("MainWindow", "打开最终结果文件夹")
+        )
         self.groupBox_2.setTitle(_translate("MainWindow", "执行日志"))
         self.meteorLabel.setText(_translate("MainWindow", "Logo"))
         self.label_20.setText(_translate("MainWindow", "自动流星雨处理程序"))
