@@ -5,6 +5,7 @@ import detection
 import gen_mask
 
 if __name__ == "__main__":
+    # NOTE: parse the CLI arguments the hard way.
     argv = sys.argv[1:]
     if len(argv) < 2:
         print(

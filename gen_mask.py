@@ -13,6 +13,7 @@ import model
 import unet_proc
 
 import settings
+from utils import filter_images
 
 
 class Gen_mask:
@@ -23,25 +24,7 @@ class Gen_mask:
     def convert_cropped_image_folder_to_mosaic_for_big_files(self, file_dir, save_dir):
         print("\nConverting the detected meteor images to mosaic if they are big ...")
 
-        included_extensions = [
-            "jpg",
-            "JPG",
-            "jpeg",
-            "JPEG",
-            "bmp",
-            "BMP",
-            "png",
-            "PNG",
-            "tif",
-            "TIF",
-            "tiff",
-            "TIFF",
-        ]
-        image_list = [
-            fn
-            for fn in os.listdir(file_dir)
-            if any(fn.endswith(ext) for ext in included_extensions)
-        ]
+        image_list = filter_images(file_dir)
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -173,25 +156,7 @@ class Gen_mask:
     def convert_image_folder_to_gray_256(self, file_dir, save_dir):
         print("\nConverting the detected meteor images to gray 256x256 size ...")
 
-        included_extensions = [
-            "jpg",
-            "JPG",
-            "jpeg",
-            "JPEG",
-            "bmp",
-            "BMP",
-            "png",
-            "PNG",
-            "tif",
-            "TIF",
-            "tiff",
-            "TIFF",
-        ]
-        image_list = [
-            fn
-            for fn in os.listdir(file_dir)
-            if any(fn.endswith(ext) for ext in included_extensions)
-        ]
+        image_list = filter_images(file_dir)
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -298,25 +263,7 @@ class Gen_mask:
     def resize_mask_to_original_cropped_size(self, file_dir, save_dir):
         print("\nResizing the mask back to original cropped size ...")
 
-        included_extensions = [
-            "jpg",
-            "JPG",
-            "jpeg",
-            "JPEG",
-            "bmp",
-            "BMP",
-            "png",
-            "PNG",
-            "tif",
-            "TIF",
-            "tiff",
-            "TIFF",
-        ]
-        image_list = [
-            fn
-            for fn in os.listdir(file_dir)
-            if any(fn.endswith(ext) for ext in included_extensions)
-        ]
+        image_list = filter_images(file_dir)
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -388,25 +335,7 @@ class Gen_mask:
     def mosaic_mask_files_merge_back(self, file_dir, save_dir):
         print("\nMerging the mosaic images back to one file ...")
 
-        included_extensions = [
-            "jpg",
-            "JPG",
-            "jpeg",
-            "JPEG",
-            "bmp",
-            "BMP",
-            "png",
-            "PNG",
-            "tif",
-            "TIF",
-            "tiff",
-            "TIFF",
-        ]
-        image_list = [
-            fn
-            for fn in os.listdir(file_dir)
-            if any(fn.endswith(ext) for ext in included_extensions)
-        ]
+        image_list = filter_images(file_dir)
 
         if not os.path.exists(save_dir):
             os.mkdir(save_dir)
@@ -497,14 +426,12 @@ class Gen_mask:
 
                         # To ensure the generated mask (RGB(255,255,255)) part is not overridden,
                         # do a logical_or operation with the existing part
-                        mask = img_mosaic.crop(
-                            (
-                                x_paste_from,
-                                y_paste_from,
-                                x_paste_from + img_width,
-                                y_paste_from + img_width,
-                            )
-                        ).convert("1")
+                        mask = img_mosaic.crop((
+                            x_paste_from,
+                            y_paste_from,
+                            x_paste_from + img_width,
+                            y_paste_from + img_width,
+                        )).convert("1")
                         img = ImageChops.logical_or(img.convert("1"), mask)
 
                         img_mosaic.paste(img, (x_paste_from, y_paste_from))

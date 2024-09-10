@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
-import cv2
-import numpy as np
 import copy
 import math
+import multiprocessing
 import os
 import shutil
 import threading
-import multiprocessing
-from time import sleep
+
+import cv2
+import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 import model
 import settings
+from utils import filter_images, load_image, SUPPORTED_RAW
 
 
 class HoughBundler:
@@ -656,17 +657,15 @@ class MeteorDetector:
 
             # End of the j for loop
             # One entry in the i for loop has completely matched with others
-            merged_detection.append(
-                [
-                    filtered_false_detection[i][0],
-                    filtered_false_detection[i][1],
-                    filtered_false_detection[i][2],
-                    filtered_false_detection[i][3],
-                    filtered_false_detection[i][4],
-                    filtered_false_detection[i][5],
-                    filtered_false_detection[i][6],
-                ]
-            )
+            merged_detection.append([
+                filtered_false_detection[i][0],
+                filtered_false_detection[i][1],
+                filtered_false_detection[i][2],
+                filtered_false_detection[i][3],
+                filtered_false_detection[i][4],
+                filtered_false_detection[i][5],
+                filtered_false_detection[i][6],
+            ])
         return merged_detection
 
     # Get the two points coordinators for a square that can hold
@@ -865,16 +864,14 @@ class MeteorDetector:
 
             # End of the j loop
             # One entry in the i for loop has completely merged with others
-            combined_box_list.append(
-                [
-                    box_list[i][0],
-                    box_list[i][1],
-                    box_list[i][2],
-                    box_list[i][3],
-                    box_list[i][4],
-                    box_list[i][5],
-                ]
-            )
+            combined_box_list.append([
+                box_list[i][0],
+                box_list[i][1],
+                box_list[i][2],
+                box_list[i][3],
+                box_list[i][4],
+                box_list[i][5],
+            ])
 
         return combined_box_list
 
@@ -950,7 +947,7 @@ class MeteorDetector:
             maxLineGap=maxLineGap,
         )
 
-        if not (lines is None):
+        if lines is not None:
             my_HoughBundler = HoughBundler()
 
             # Merge those lines that are very closed
@@ -1138,12 +1135,24 @@ class MeteorDetector:
                     p_x1, p_y1, p_x2, p_y2, c_x1, c_y1, c_x2, c_y2, for_satellite=True
                 ):
                     # Ok we can consider these as due to the same satellite
-                    self.Previous_Image_Satellites.append(
-                        [p_x1, p_y1, p_x2, p_y2, p_x_mid, p_y_mid, p_angle]
-                    )
-                    self.Current_Image_Satellites.append(
-                        [c_x1, c_y1, c_x2, c_y2, c_x_mid, c_y_mid, c_angle]
-                    )
+                    self.Previous_Image_Satellites.append([
+                        p_x1,
+                        p_y1,
+                        p_x2,
+                        p_y2,
+                        p_x_mid,
+                        p_y_mid,
+                        p_angle,
+                    ])
+                    self.Current_Image_Satellites.append([
+                        c_x1,
+                        c_y1,
+                        c_x2,
+                        c_y2,
+                        c_x_mid,
+                        c_y_mid,
+                        c_angle,
+                    ])
 
             # end of the for current_line loop
         # end of the for previous_line loop
@@ -1203,7 +1212,7 @@ class MeteorDetector:
             # Change to this method as a work-around for the issue
             # in OpenCV PY supporting Chinese path/file name
             # cv2.IMREAD_UNCHANGED == -1
-            orig_img = cv2.imdecode(np.fromfile(filename_w_path, dtype=np.uint8), -1)
+            orig_img = load_image(filename_w_path)
         else:
             # We had opened this image when processing the previous image
             # Just reuse it
@@ -1212,9 +1221,7 @@ class MeteorDetector:
         # Do a subtraction with another image, which has been star-aligned
         file_for_subtraction_w_path = os.path.join(file_dir, file_for_subtraction)
         # img_for_subtraction = cv2.imread(file_for_subtraction_w_path)
-        img_for_subtraction = cv2.imdecode(
-            np.fromfile(file_for_subtraction_w_path, dtype=np.uint8), -1
-        )
+        img_for_subtraction = load_image(file_for_subtraction_w_path)
 
         # Store the "next image"
         # It will be used as the "current image" when we process
@@ -1227,7 +1234,7 @@ class MeteorDetector:
         detection_lines = self.detect_meteor_from_image(
             img, orig_img, equatorial_mount=equatorial_mount
         )
-        if not (detection_lines is None):
+        if detection_lines is not None:
             self.Current_Image_Detection_Lines = detection_lines
         else:
             self.Current_Image_Detection_Lines = []
@@ -1245,13 +1252,21 @@ class MeteorDetector:
             self.check_satellite_with_previous_detection_list(verbose)
 
             filename_no_ext, file_ext = os.path.splitext(self.Previous_Image_Filename)
+            if file_ext.lower().replace(".", "") in SUPPORTED_RAW:
+                file_ext = ".jpg" if file_ext[0] == "." else "jpg"
 
             previous_detection_wo_satellite = []
             for line in self.Previous_Image_Detection_Lines:
-                if not (line in self.Previous_Image_Satellites):
-                    previous_detection_wo_satellite.append(
-                        [line[0], line[1], line[2], line[3], line[4], line[5], line[6]]
-                    )
+                if line not in self.Previous_Image_Satellites:
+                    previous_detection_wo_satellite.append([
+                        line[0],
+                        line[1],
+                        line[2],
+                        line[3],
+                        line[4],
+                        line[5],
+                        line[6],
+                    ])
 
             # print(self.Previous_Image_Filename)
             # print(self.Previous_Image_Detection_Lines)
@@ -1365,7 +1380,7 @@ class MeteorDetector:
 
         filename_w_path = os.path.join(file_dir, orig_filename)
         # orig_img = cv2.imread(filename_w_path)
-        orig_img = cv2.imdecode(np.fromfile(filename_w_path, dtype=np.uint8), -1)
+        orig_img = load_image(filename_w_path)
 
         filename_no_ext, file_ext = os.path.splitext(orig_filename)
 
@@ -1375,7 +1390,7 @@ class MeteorDetector:
         detection_lines = self.detect_meteor_from_image(
             img_for_detection, orig_img, equatorial_mount=False
         )
-        if not (detection_lines is None):
+        if detection_lines is not None:
             # self.Current_Image_Detection_Lines = detection_lines
             draw_img = self.draw_detection_boxes_on_image(
                 orig_img, detection_lines, color=(255, 255, 0)
@@ -1439,25 +1454,7 @@ class MeteorDetector:
         # image_list = fnmatch.filter(os.listdir(file_dir), '*.py')
 
         if len(selected_image_list) == 0:
-            included_extensions = [
-                "jpg",
-                "JPG",
-                "jpeg",
-                "JPEG",
-                "bmp",
-                "BMP",
-                "png",
-                "PNG",
-                "tif",
-                "TIF",
-                "tiff",
-                "TIFF",
-            ]
-            image_list = [
-                fn
-                for fn in os.listdir(file_dir)
-                if any(fn.endswith(ext) for ext in included_extensions)
-            ]
+            image_list = filter_images(os.listdir(file_dir))
         else:
             image_list = selected_image_list
 
@@ -1596,25 +1593,7 @@ class Detection_Thread(threading.Thread):
 def multi_thread_process_detect_n_extract_meteor_from_folder(
     file_dir, save_dir, subtraction=True, equatorial_mount=False, verbose=1
 ):
-    included_extensions = [
-        "jpg",
-        "JPG",
-        "jpeg",
-        "JPEG",
-        "bmp",
-        "BMP",
-        "png",
-        "PNG",
-        "tif",
-        "TIF",
-        "tiff",
-        "TIFF",
-    ]
-    image_list = [
-        fn
-        for fn in os.listdir(file_dir)
-        if any(fn.endswith(ext) for ext in included_extensions)
-    ]
+    image_list = filter_images(os.listdir(file_dir))
 
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
